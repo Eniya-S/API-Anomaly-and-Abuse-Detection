@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📊 API Dashboard</h1>
+
+    <h2>Welcome {{ username }}</h2>
+
+    <hr>
+
+    <div class="card">
+
+        <h3>Total APIs</h3>
+
+        <h1>{{ total_apis }}</h1>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h3>Registered Users</h3>
+
+        <h1>{{ active_users }}</h1>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h3>Total API Tests</h3>
+
+        <h1>{{ total_tests }}</h1>
+
+    </div>
+
+    <div class="card">
+
+        <h3>System Status</h3>
+
+        <p class="success">🟢 All APIs Running Successfully</p>
+
+    </div>
+
+    <br>
+
+    <a href="/profile">
+        <button>👤 Profile</button>
+    </a>
+
+    <a href="/products">
+        <button>🔌 API Services</button>
+    </a>
+
+    <a href="/api-test">
+        <button>🧪 API Test Service</button>
+    </a>
+
+    <a href="/logout">
+        <button>🚪 Logout</button>
+    </a>
+
+</div>
+
+</body>
+</html>

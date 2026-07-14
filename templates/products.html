@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Services</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🛡 API Services</h1>
+
+    <p>Available services in API Shield AI</p>
+
+    <table>
+
+        <tr>
+            <th>Service Name</th>
+            <th>Description</th>
+        </tr>
+
+        {% for service in services %}
+
+        <tr>
+            <td>{{ service.name }}</td>
+            <td>{{ service.description }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <br>
+
+
+    <a href="/api-test">
+        <button>🧪 API Test Service</button>
+    </a>
+
+    <a href="/dashboard">
+        <button>Dashboard</button>
+    </a>
+
+    <a href="/profile">
+        <button>Profile</button>
+    </a>
+
+    <a href="/">
+        <button>Home</button>
+    </a>
+
+    <a href="/logout">
+        <button>Logout</button>
+    </a>
+
+</div>
+
+</body>
+</html>

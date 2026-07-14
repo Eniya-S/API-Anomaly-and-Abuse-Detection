@@ -1,0 +1,99 @@
+[
+    {
+        "username": "Bhavadharani S",
+        "email": "bhava1234@gmail.com",
+        "password": "bhava@2402"
+    },
+    {
+        "username": "Deekshi",
+        "email": "deekshi4567@gmail.com",
+        "password": "Deekshi@4567"
+    },
+    {
+        "username": "Arun Kumar",
+        "email": "arun.kumar@gmail.com",
+        "password": "12345",
+        "persona": "normal"
+    },
+    {
+        "username": "Priya Sharma",
+        "email": "priya.sharma@gmail.com",
+        "password": "12345",
+        "persona": "explorer"
+    },
+    {
+        "username": "Rahul Verma",
+        "email": "rahul.verma@gmail.com",
+        "password": "12345",
+        "persona": "admin"
+    },
+    {
+        "username": "Sneha Patel",
+        "email": "sneha.patel@gmail.com",
+        "password": "12345",
+        "persona": "normal"
+    },
+    {
+        "username": "Karthik Raj",
+        "email": "karthik.raj@gmail.com",
+        "password": "12345",
+        "persona": "explorer"
+    },
+    {
+        "username": "Vishal Mehta",
+        "email": "vishal.mehta@gmail.com",
+        "password": "12345",
+        "persona": "admin"
+    },
+    {
+        "username": "Ananya Reddy",
+        "email": "ananya.reddy@gmail.com",
+        "password": "12345",
+        "persona": "normal"
+    },
+    {
+        "username": "Rohit Singh",
+        "email": "rohit.singh@gmail.com",
+        "password": "12345",
+        "persona": "explorer"
+    },
+    {
+        "username": "Divya Nair",
+        "email": "divya.nair@gmail.com",
+        "password": "12345",
+        "persona": "normal"
+    },
+    {
+        "username": "Sanjay Kumar",
+        "email": "sanjay.kumar@gmail.com",
+        "password": "12345",
+        "persona": "admin"
+    },
+    {
+        "username": "Meera Iyer",
+        "email": "meera.iyer@gmail.com",
+        "password": "12345",
+        "persona": "explorer"
+    },
+    {
+        "username": "Ajay Menon",
+        "email": "ajay.menon@gmail.com",
+        "password": "12345",
+        "persona": "normal"
+    },
+    {
+        "username": "Eniya S",
+        "email": "eniya123@gmail.com",
+        "password": "Eniya@123"
+    },
+    {
+        "username": "Ashifa K",
+        "email": "ashifa@gmail.com",
+        "password": "ashifa@123"
+    },
+    {
+        "username": "sibi varsini",
+        "email": "sibi@gmail.com",
+        "password": "1234567"
+    }
+]

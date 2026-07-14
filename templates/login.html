@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🔐 User Login</h1>
+
+    <p>Please login to access API Shield AI services.</p>
+
+    <br>
+
+    <form action="/login" method="POST">
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Enter Username"
+            required>
+
+        <br><br>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+            required>
+
+        <br><br>
+
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+
+    <br>
+
+    {% if error %}
+
+    <div style="color:red; font-weight:bold; font-size:18px;">
+        {{ error }}
+    </div>
+
+    <br>
+
+    <a href="/change-password">
+        <button>
+            🔒 Change Password
+        </button>
+    </a>
+
+    <br><br>
+
+    {% endif %}
+
+    <a href="/">
+        <button>
+            🏠 Home
+        </button>
+    </a>
+
+    <a href="/signup">
+        <button>
+            ➕ Create Account
+        </button>
+    </a>
+
+</div>
+
+</body>
+
+</html>

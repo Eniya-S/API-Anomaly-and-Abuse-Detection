@@ -1,0 +1,178 @@
+body{
+    margin:0;
+    padding:0;
+    background:#0f172a;
+    font-family:Arial, Helvetica, sans-serif;
+    color:white;
+}
+
+.container{
+    width:80%;
+    margin:auto;
+    text-align:center;
+    margin-top:50px;
+}
+
+h1{
+    font-size:45px;
+    color:#38bdf8;
+}
+
+h2{
+    color:#cbd5e1;
+}
+
+p{
+    font-size:18px;
+    color:#d1d5db;
+}
+
+.buttons{
+    margin-top:30px;
+}
+
+button{
+    padding:12px 25px;
+    margin:10px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+table{
+    width:100%;
+    margin-top:40px;
+    border-collapse:collapse;
+}
+
+table,th,td{
+    border:1px solid white;
+}
+
+th{
+    background:#2563eb;
+}
+
+th,td{
+    padding:15px;
+}
+
+hr{
+    margin-top:40px;
+}
+input{
+    width:300px;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    font-size:16px;
+}
+
+form{
+    margin-top:30px;
+}
+/* Links */
+
+a{
+    text-decoration:none;
+}
+
+/* Card Style */
+
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:10px;
+    margin:20px auto;
+    width:80%;
+    box-shadow:0 0 10px rgba(0,0,0,0.4);
+}
+
+/* Product List */
+
+ul{
+    list-style:none;
+    padding:0;
+    margin-top:20px;
+}
+
+ul li{
+    background:#334155;
+    padding:15px;
+    margin:10px 0;
+    border-radius:8px;
+    font-size:18px;
+    transition:0.3s;
+}
+
+ul li:hover{
+    background:#475569;
+}
+
+/* Profile Details */
+
+.profile-box{
+    background:#1e293b;
+    width:60%;
+    margin:30px auto;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 0 15px rgba(0,0,0,0.4);
+}
+
+/* Success Message */
+
+.success{
+    color:#22c55e;
+    font-size:18px;
+    margin-top:20px;
+}
+
+/* Error Message */
+
+.error{
+    color:#ef4444;
+    font-size:18px;
+    margin-top:20px;
+}
+
+/* Footer */
+
+footer{
+    margin-top:50px;
+    color:#94a3b8;
+    font-size:14px;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.container{
+    width:95%;
+}
+
+input{
+    width:90%;
+}
+
+button{
+    width:90%;
+}
+
+table{
+    font-size:14px;
+}
+
+.profile-box{
+    width:95%;
+}
+
+}
