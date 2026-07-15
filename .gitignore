@@ -3,4 +3,9 @@ __pycache__/
 temp_repo/
 data/test_tmp.txt
 /tests
+data/anomaly_results.csvAPI-Anomaly-Project/
+temp_repo/
+tests/__pycache__/
+.pytest_cache/
 data/anomaly_results.csv
+API-Anomaly-Project/
