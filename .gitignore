@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+temp_repo/
+data/test_tmp.txt
+/tests
+data/anomaly_results.csv
