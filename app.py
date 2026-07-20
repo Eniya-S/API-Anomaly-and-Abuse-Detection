@@ -5,6 +5,8 @@ import time
 import uuid
 from pathlib import Path
 from logger import log_request
+import subprocess
+import sys
 
 app = Flask(__name__)
 app.secret_key = "api_anomaly_project"
@@ -145,22 +147,35 @@ def login():
 
 
 # ---------------- DASHBOARD ----------------
+# @app.route("/dashboard")
+# def dashboard():
+#     if "user" not in session:
+#         session["next_page"] = "dashboard"
+#         return redirect(url_for("login"))
+
+#     total_tests = len(load_api_tests())
+
+#     return render_template(
+#         "dashboard.html",
+#         username=session["user"],
+#         total_apis=8,
+#         active_users=len(load_users()),
+#         total_tests=total_tests,
+#     )
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
         session["next_page"] = "dashboard"
-        return redirect(url_for("login"))
+    subprocess.Popen([
+        sys.executable,
+        "-m",
+        "streamlit",
+        "run",
+        "dashboard.py"
+    ])
+        # return redirect(url_for("login"))
 
-    total_tests = len(load_api_tests())
-
-    return render_template(
-        "dashboard.html",
-        username=session["user"],
-        total_apis=8,
-        active_users=len(load_users()),
-        total_tests=total_tests,
-    )
-
+    return redirect("http://localhost:8501")
 
 # ---------------- PROFILE ----------------
 @app.route("/profile")
