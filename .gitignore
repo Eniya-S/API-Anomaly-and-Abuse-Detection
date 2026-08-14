@@ -1,5 +1,7 @@
 __pycache__/
 *.pyc
+.venv/
+node_modules/
 temp_repo/
 data/test_tmp.txt
 /tests
