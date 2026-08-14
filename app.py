@@ -1,19 +1,44 @@
 from flask import Flask, g, redirect, render_template, request, session, url_for
 import json
 import os
+import shutil
 import time
 import uuid
 from pathlib import Path
 from logger import log_request
-import subprocess
-import sys
 
 app = Flask(__name__)
 app.secret_key = "api_anomaly_project"
 
 BASE_DIR = Path(__file__).resolve().parent
-USERS_FILE = BASE_DIR / "data" / "users.json"
-API_TEST_FILE = BASE_DIR / "data" / "api_tests.json"
+SRC_DATA_DIR = BASE_DIR / "data"
+
+
+def _resolve_data_dir():
+    """Return a writable data directory.
+
+    On Vercel (and any read-only filesystem) the project directory cannot be
+    written to, so we fall back to /tmp, seeding it with the repo's data files
+    on cold start. Note: /tmp is ephemeral, so writes do not persist between
+    deployments or across cold starts.
+    """
+    if os.environ.get("VERCEL") or not os.access(BASE_DIR, os.W_OK):
+        tmp = Path("/tmp/data")
+        try:
+            if not tmp.exists():
+                if SRC_DATA_DIR.exists():
+                    shutil.copytree(SRC_DATA_DIR, tmp)
+                else:
+                    tmp.mkdir(parents=True, exist_ok=True)
+        except Exception:
+            tmp.mkdir(parents=True, exist_ok=True)
+        return tmp
+    return SRC_DATA_DIR
+
+
+DATA_DIR = _resolve_data_dir()
+USERS_FILE = DATA_DIR / "users.json"
+API_TEST_FILE = DATA_DIR / "api_tests.json"
 
 if not os.path.exists(USERS_FILE):
     with open(USERS_FILE, "w", encoding="utf-8") as f:
@@ -37,7 +62,11 @@ def after_request(response):
         elapsed_ms = round((time.perf_counter() - start_time) * 1000, 2)
     else:
         elapsed_ms = 0.0
-    log_request(request, response.status_code, response_time_ms=elapsed_ms)
+    try:
+        log_request(request, response.status_code, response_time_ms=elapsed_ms)
+    except Exception:
+        # Logging must never break a response (e.g. read-only filesystem).
+        pass
     req_id = getattr(g, "request_id", None)
     if req_id:
         response.headers["X-Request-ID"] = req_id
@@ -55,7 +84,10 @@ def handle_exception(error):
         elapsed_ms = round((time.perf_counter() - start_time) * 1000, 2)
     else:
         elapsed_ms = 0.0
-    log_request(request, 500, response_time_ms=elapsed_ms)
+    try:
+        log_request(request, 500, response_time_ms=elapsed_ms)
+    except Exception:
+        pass
     return "Internal Server Error", 500
 
 
@@ -147,35 +179,21 @@ def login():
 
 
 # ---------------- DASHBOARD ----------------
-# @app.route("/dashboard")
-# def dashboard():
-#     if "user" not in session:
-#         session["next_page"] = "dashboard"
-#         return redirect(url_for("login"))
-
-#     total_tests = len(load_api_tests())
-
-#     return render_template(
-#         "dashboard.html",
-#         username=session["user"],
-#         total_apis=8,
-#         active_users=len(load_users()),
-#         total_tests=total_tests,
-#     )
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
         session["next_page"] = "dashboard"
-    subprocess.Popen([
-        sys.executable,
-        "-m",
-        "streamlit",
-        "run",
-        "dashboard.py"
-    ])
-        # return redirect(url_for("login"))
+        return redirect(url_for("login"))
 
-    return redirect("http://localhost:8501")
+    total_tests = len(load_api_tests())
+
+    return render_template(
+        "dashboard.html",
+        username=session["user"],
+        total_apis=8,
+        active_users=len(load_users()),
+        total_tests=total_tests,
+    )
 
 # ---------------- PROFILE ----------------
 @app.route("/profile")
