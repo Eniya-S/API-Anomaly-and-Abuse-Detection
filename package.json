@@ -1,0 +1,10 @@
+{
+  "name": "api-anomaly-abuse-detection",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Flask app for API anomaly and abuse detection. The dev script boots the Python/Flask server so the v0 preview can render it.",
+  "scripts": {
+    "dev": "uv venv .venv && uv pip install -q --python .venv/bin/python -r requirements.txt && .venv/bin/python app.py",
+    "start": ".venv/bin/python app.py"
+  }
+}

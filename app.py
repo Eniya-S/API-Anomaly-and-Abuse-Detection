@@ -291,5 +291,6 @@ def logout():
 
 # ---------------- RUN APP ----------------
 if __name__ == "__main__":
-    print("API Shield AI Server Started...")
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 3000))
+    print(f"API Shield AI Server Started on port {port}...")
+    app.run(host="0.0.0.0", port=port, debug=True)

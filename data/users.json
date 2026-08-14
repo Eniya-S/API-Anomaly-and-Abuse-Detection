@@ -95,5 +95,10 @@
         "username": "tester",
         "email": "tester@example.com",
         "password": "Password123"
+    },
+    {
+        "username": "demo",
+        "email": "d@e.com",
+        "password": "pw"
     }
 ]

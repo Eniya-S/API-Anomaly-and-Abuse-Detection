@@ -2471,3 +2471,14 @@ Timestamp,Username,Client_IP,Endpoint,HTTP_Method,HTTP_Status,Response_Time_ms,U
 2026-07-15 20:24:53,Deekshitaa,127.0.0.1,/login,POST,200,1.15,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",56bf95e3-f0eb-4f57-b101-d509d925cf77,676872f8-57af-4732-a187-9ac9e3c48708
 2026-07-15 20:24:59,Deekshitaa,127.0.0.1,/login,POST,302,0.58,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",033b01ee-c043-42e0-aef2-941636de6636,b30e83cd-d3d5-4d5f-985d-d1cb5094691d
 2026-07-15 20:24:59,Deekshitaa,127.0.0.1,/dashboard,GET,200,1.27,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",033b01ee-c043-42e0-aef2-941636de6636,5196f47c-7c45-4c71-8a82-2485cfe50c52
+2026-08-14 08:38:48,anonymous,127.0.0.1,/,GET,200,3.76,curl/8.17.0,3bfcbd5f-9a05-4ffe-bf88-b18c161bb755,bb3d9de9-c4bb-4416-9aa5-b0327b28bb45
+2026-08-14 08:38:48,anonymous,127.0.0.1,/login,GET,200,1.37,curl/8.17.0,eabdc721-aa11-4cb8-be0c-d916a75a21d1,8d62ed54-4248-453f-aef2-d3c16ccd2fa0
+2026-08-14 08:38:48,anonymous,127.0.0.1,/signup,GET,200,0.86,curl/8.17.0,1165578c-d87a-499c-bd88-f07a1c63664f,a4a472b2-a700-4aca-b6b5-b5ac59032d04
+2026-08-14 08:38:48,anonymous,127.0.0.1,/dashboard,GET,302,0.07,curl/8.17.0,73628a2e-81e8-41ec-8a46-5e6819feddef,c8410d7c-c208-4ddd-8212-b3abc1b8063a
+2026-08-14 08:39:23,anonymous,127.0.0.1,/signup,POST,302,2.37,curl/8.17.0,724e18e4-9aca-469f-9579-cffedb1427a8,bab57dc1-6b5c-4ffd-8c5f-60ad57896270
+2026-08-14 08:39:23,demo,127.0.0.1,/login,POST,302,0.31,curl/8.17.0,e3e6817b-0fc8-49ec-9b64-e4358aba2daf,0147cabd-9ae3-482c-9588-0995c1b91ba8
+2026-08-14 08:39:23,demo,127.0.0.1,/dashboard,GET,200,2.59,curl/8.17.0,e3e6817b-0fc8-49ec-9b64-e4358aba2daf,a064330f-310b-435c-8da2-b4e0d026202c
+2026-08-14 08:39:23,anonymous,127.0.0.1,/,GET,200,1.1,curl/8.17.0,624d837b-9ad9-4284-92ba-ad014f441803,b9007804-d553-4d39-9169-79ac8fb2b760
+2026-08-14 08:39:42,anonymous,127.0.0.1,/,GET,200,0.2,curl/8.17.0,c339075d-842b-4b5c-9cf2-c1c6a4ca700e,a197c802-c6c7-40a6-85e8-ccef205260d6
+2026-08-14 08:39:50,anonymous,3.139.82.85,/,GET,200,0.23,"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",3644c19e-2bd2-4801-ba24-5b2f74b8b749,91dcefc3-874a-45f7-8923-900061fbee43
+2026-08-14 08:40:04,anonymous,13.57.148.235,/,GET,200,0.19,"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.0 Safari/537.36",2744c540-9c4b-48e7-b864-3247e5b61a0b,c4d63101-2ace-4bf6-a49d-70934c79a07f
