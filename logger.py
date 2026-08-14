@@ -1,4 +1,6 @@
 import csv
+import os
+import shutil
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -7,7 +9,30 @@ from flask import session as flask_session, g
 
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "data"
+SRC_DATA_DIR = BASE_DIR / "data"
+
+
+def _resolve_data_dir():
+    """Return a writable data directory (mirrors app.py).
+
+    On Vercel / read-only filesystems, fall back to /tmp so log writes do not
+    crash the request. Storage there is ephemeral.
+    """
+    if os.environ.get("VERCEL") or not os.access(BASE_DIR, os.W_OK):
+        tmp = Path("/tmp/data")
+        try:
+            if not tmp.exists():
+                if SRC_DATA_DIR.exists():
+                    shutil.copytree(SRC_DATA_DIR, tmp)
+                else:
+                    tmp.mkdir(parents=True, exist_ok=True)
+        except Exception:
+            tmp.mkdir(parents=True, exist_ok=True)
+        return tmp
+    return SRC_DATA_DIR
+
+
+DATA_DIR = _resolve_data_dir()
 LOG_FILE = DATA_DIR / "access_logs.csv"
 
 EXPECTED_HEADER = [

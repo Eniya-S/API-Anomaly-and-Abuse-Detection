@@ -1,6 +1,2 @@
 flask
-pandas
-pytest
-requests
-scikit-learn
 werkzeug
