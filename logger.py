@@ -40,9 +40,11 @@ ALLOWED_ENDPOINTS = {
 
 
 def extract_client_ip(request):
-    forwarded_for = request.headers.get("X-Forwarded-For")
-    if forwarded_for:
-        return forwarded_for.split(",")[0].strip()
+    # Only trust X-Forwarded-For if it is simulated traffic (marked by X-Persona header)
+    if request.headers.get("X-Persona"):
+        forwarded_for = request.headers.get("X-Forwarded-For")
+        if forwarded_for:
+            return forwarded_for.split(",")[0].strip()
     return request.remote_addr or "unknown"
 
 
@@ -111,10 +113,14 @@ def _ensure_log_header():
 
 
 def _append_log_row(row):
-    _ensure_log_header()
-    with LOG_FILE.open("a", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(row)
+    try:
+        _ensure_log_header()
+        with LOG_FILE.open("a", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(row)
+    except Exception as e:
+        # Ignore write failures gracefully under stateless/serverless environments (like Vercel)
+        pass
 
 
 def log_request(request, status_code, response_time_ms=None, request_id=None, session_id=None, fallback_session_id=None):

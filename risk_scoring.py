@@ -104,6 +104,21 @@ def score_requests(input_path: str | Path | None = None, output_csv: str | Path 
         if int(row["Anomaly_Label"]) == -1:
             score += 40
             reasons_for_row.append("Isolation Forest flagged this request as anomalous")
+            
+        # Add attack classification risk weight
+        attack_type = row.get("Attack_Type", "Normal")
+        if pd.isna(attack_type):
+            attack_type = "Normal"
+            
+        if attack_type == "Brute_Force":
+            score += 20
+            reasons_for_row.append("Classified as Brute Force attack")
+        elif attack_type == "Endpoint_Scanning":
+            score += 15
+            reasons_for_row.append("Classified as Endpoint Scanning probe")
+        elif attack_type == "Request_Flooding":
+            score += 10
+            reasons_for_row.append("Classified as Request Flooding volume abuse")
 
         user = str(row["Username"])
         user_anomalies = user_anomaly_counts.get(user, 0)

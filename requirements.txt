@@ -4,3 +4,6 @@ pytest
 requests
 scikit-learn
 werkzeug
+joblib
+streamlit
+plotly
