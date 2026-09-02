@@ -13,43 +13,72 @@ app.secret_key = "api_anomaly_project"
 
 
 BASE_DIR = Path(__file__).resolve().parent
-USERS_FILE = BASE_DIR / "data" / "users.json"
-API_TEST_FILE = BASE_DIR / "data" / "api_tests.json"
 
 
-# ---------------- CREATE DATA FILES IF NOT EXISTS ----------------
+# ============================================================
+# FILE PATHS
+# ============================================================
+
+# Vercel serverless environment is read-only except /tmp.
+# Local development uses the normal data folder.
+if os.getenv("VERCEL"):
+    USERS_FILE = Path("/tmp/users.json")
+    API_TEST_FILE = Path("/tmp/api_tests.json")
+else:
+    USERS_FILE = BASE_DIR / "data" / "users.json"
+    API_TEST_FILE = BASE_DIR / "data" / "api_tests.json"
+
+
+# ============================================================
+# CREATE DATA FILES IF NOT EXISTS
+# ============================================================
 
 if not os.path.exists(USERS_FILE):
     with open(USERS_FILE, "w", encoding="utf-8") as f:
         json.dump([], f)
+
 
 if not os.path.exists(API_TEST_FILE):
     with open(API_TEST_FILE, "w", encoding="utf-8") as f:
         json.dump([], f)
 
 
-# ---------------- REQUEST START ----------------
+# ============================================================
+# REQUEST START
+# ============================================================
 
 @app.before_request
 def before_request():
+
     g.request_start_time = time.perf_counter()
+
     g.request_id = str(uuid.uuid4())
 
 
-# ---------------- REQUEST LOGGING ----------------
+# ============================================================
+# REQUEST LOGGING
+# ============================================================
 
 @app.after_request
 def after_request(response):
 
-    start_time = getattr(g, "request_start_time", None)
+    start_time = getattr(
+        g,
+        "request_start_time",
+        None
+    )
 
     if start_time is not None:
+
         elapsed_ms = round(
             (time.perf_counter() - start_time) * 1000,
             2
         )
+
     else:
+
         elapsed_ms = 0.0
+
 
     log_request(
         request,
@@ -57,39 +86,62 @@ def after_request(response):
         response_time_ms=elapsed_ms
     )
 
-    req_id = getattr(g, "request_id", None)
+
+    req_id = getattr(
+        g,
+        "request_id",
+        None
+    )
+
 
     if req_id:
+
         response.headers["X-Request-ID"] = req_id
+
 
     return response
 
 
-# ---------------- ERROR HANDLER ----------------
+# ============================================================
+# ERROR HANDLER
+# ============================================================
 
 @app.errorhandler(Exception)
 def handle_exception(error):
 
     from werkzeug.exceptions import HTTPException
 
+
     if isinstance(error, HTTPException):
+
         return error
 
-    start_time = getattr(g, "request_start_time", None)
+
+    start_time = getattr(
+        g,
+        "request_start_time",
+        None
+    )
+
 
     if start_time is not None:
+
         elapsed_ms = round(
             (time.perf_counter() - start_time) * 1000,
             2
         )
+
     else:
+
         elapsed_ms = 0.0
+
 
     log_request(
         request,
         500,
         response_time_ms=elapsed_ms
     )
+
 
     return "Internal Server Error", 500
 
@@ -102,16 +154,25 @@ def load_users():
 
     try:
 
-        with open(USERS_FILE, "r", encoding="utf-8") as f:
+        with open(
+            USERS_FILE,
+            "r",
+            encoding="utf-8"
+        ) as f:
 
             content = f.read().strip()
 
+
             if content == "":
+
                 return []
+
 
             return json.loads(content)
 
+
     except Exception:
+
         return []
 
 
@@ -121,7 +182,11 @@ def load_users():
 
 def save_users(users):
 
-    with open(USERS_FILE, "w", encoding="utf-8") as f:
+    with open(
+        USERS_FILE,
+        "w",
+        encoding="utf-8"
+    ) as f:
 
         json.dump(
             users,
@@ -138,11 +203,17 @@ def load_api_tests():
 
     try:
 
-        with open(API_TEST_FILE, "r", encoding="utf-8") as f:
+        with open(
+            API_TEST_FILE,
+            "r",
+            encoding="utf-8"
+        ) as f:
 
             return json.load(f)
 
+
     except Exception:
+
         return []
 
 
@@ -152,7 +223,11 @@ def load_api_tests():
 
 def save_api_tests(tests):
 
-    with open(API_TEST_FILE, "w", encoding="utf-8") as f:
+    with open(
+        API_TEST_FILE,
+        "w",
+        encoding="utf-8"
+    ) as f:
 
         json.dump(
             tests,
@@ -168,23 +243,32 @@ def save_api_tests(tests):
 @app.route("/")
 def home():
 
-    return render_template("home.html")
+    return render_template(
+        "home.html"
+    )
 
 
 # ============================================================
 # SIGNUP
 # ============================================================
 
-@app.route("/signup", methods=["GET", "POST"])
+@app.route(
+    "/signup",
+    methods=["GET", "POST"]
+)
 def signup():
 
     if request.method == "POST":
 
         username = request.form["username"]
+
         email = request.form["email"]
+
         password = request.form["password"]
 
+
         users = load_users()
+
 
         # Check duplicate username
         for user in users:
@@ -193,35 +277,54 @@ def signup():
 
                 return "Username already exists!"
 
+
         # Add new user
         users.append({
+
             "username": username,
+
             "email": email,
+
             "password": password
+
         })
+
 
         save_users(users)
 
-        return redirect(url_for("login"))
 
-    return render_template("signup.html")
+        return redirect(
+            url_for("login")
+        )
+
+
+    return render_template(
+        "signup.html"
+    )
 
 
 # ============================================================
 # LOGIN
 # ============================================================
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route(
+    "/login",
+    methods=["GET", "POST"]
+)
 def login():
 
     error = None
 
+
     if request.method == "POST":
 
         username = request.form["username"]
+
         password = request.form["password"]
 
+
         users = load_users()
+
 
         for user in users:
 
@@ -233,8 +336,12 @@ def login():
                 # Store logged-in user
                 session["user"] = username
 
+
                 # Create session ID
-                session["session_id"] = str(uuid.uuid4())
+                session["session_id"] = str(
+                    uuid.uuid4()
+                )
+
 
                 # Redirect to requested page
                 next_page = session.pop(
@@ -242,9 +349,14 @@ def login():
                     "dashboard"
                 )
 
-                return redirect(url_for(next_page))
+
+                return redirect(
+                    url_for(next_page)
+                )
+
 
         error = "Invalid Username or Password"
+
 
     return render_template(
         "login.html",
@@ -264,17 +376,25 @@ def dashboard():
 
         session["next_page"] = "dashboard"
 
-        return redirect(url_for("login"))
+        return redirect(
+            url_for("login")
+        )
+
 
     # Get total API tests
-    total_tests = len(load_api_tests())
+    total_tests = len(
+        load_api_tests()
+    )
+
 
     # Open normal Flask dashboard.html
     return render_template(
         "dashboard.html",
         username=session["user"],
         total_apis=8,
-        active_users=len(load_users()),
+        active_users=len(
+            load_users()
+        ),
         total_tests=total_tests,
     )
 
@@ -290,7 +410,10 @@ def profile():
 
         session["next_page"] = "profile"
 
-        return redirect(url_for("login"))
+        return redirect(
+            url_for("login")
+        )
+
 
     return render_template(
         "profile.html",
@@ -309,7 +432,10 @@ def products():
 
         session["next_page"] = "products"
 
-        return redirect(url_for("login"))
+        return redirect(
+            url_for("login")
+        )
+
 
     services = [
 
@@ -345,6 +471,7 @@ def products():
 
     ]
 
+
     return render_template(
         "products.html",
         services=services
@@ -363,13 +490,18 @@ def change_password():
 
     message = None
 
+
     if request.method == "POST":
 
         username = request.form["username"]
+
         old_password = request.form["old_password"]
+
         new_password = request.form["new_password"]
 
+
         users = load_users()
+
 
         for user in users:
 
@@ -379,23 +511,34 @@ def change_password():
 
                     user["password"] = new_password
 
+
                     save_users(users)
 
-                    message = "Password Updated Successfully!"
+
+                    message = (
+                        "Password Updated Successfully!"
+                    )
+
 
                     return render_template(
                         "change_password.html",
                         message=message
                     )
 
-                message = "Old Password is Incorrect!"
+
+                message = (
+                    "Old Password is Incorrect!"
+                )
+
 
                 return render_template(
                     "change_password.html",
                     message=message
                 )
 
+
         message = "Username Not Found!"
+
 
     return render_template(
         "change_password.html",
@@ -417,17 +560,24 @@ def api_test():
 
         session["next_page"] = "api_test"
 
-        return redirect(url_for("login"))
+        return redirect(
+            url_for("login")
+        )
+
 
     if request.method == "POST":
 
         api_name = request.form["api_name"]
+
         test_type = request.form["test_type"]
+
         request_count = int(
             request.form["request_count"]
         )
 
+
         tests = load_api_tests()
+
 
         tests.append({
 
@@ -441,7 +591,9 @@ def api_test():
 
         })
 
+
         save_api_tests(tests)
+
 
         return render_template(
             "api_test.html",
@@ -451,7 +603,10 @@ def api_test():
             ),
         )
 
-    return render_template("api_test.html")
+
+    return render_template(
+        "api_test.html"
+    )
 
 
 # ============================================================
@@ -461,11 +616,20 @@ def api_test():
 @app.route("/logout")
 def logout():
 
-    session.pop("user", None)
+    session.pop(
+        "user",
+        None
+    )
 
-    session.pop("session_id", None)
+    session.pop(
+        "session_id",
+        None
+    )
 
-    return redirect(url_for("home"))
+
+    return redirect(
+        url_for("home")
+    )
 
 
 # ============================================================
@@ -474,7 +638,10 @@ def logout():
 
 if __name__ == "__main__":
 
-    print("API Shield AI Server Started...")
+    print(
+        "API Shield AI Server Started..."
+    )
+
 
     app.run(
         debug=True,
