@@ -1,0 +1,10 @@
+# Full dependency set for local development and the offline analysis /
+# simulation scripts (dashboard.py, behavioral_profiling.py, risk_scoring.py,
+# simulator/traffic_simulator.py). The deployed Flask web app only needs the
+# packages in requirements.txt.
+flask
+werkzeug
+pandas
+scikit-learn
+requests
+pytest
