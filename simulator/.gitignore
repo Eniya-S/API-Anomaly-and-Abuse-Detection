@@ -1,0 +1,34 @@
+# Secrets and Credentials (Kandipa ignore pannanum)
+.env
+.env.*
+*.pem
+*.key
+
+# Python Cache, Environment & Compiled Files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+venv/
+.venv/
+env/
+
+# Node.js / Vercel Build files
+node_modules/
+.pnpm-store/
+.vercel/
+
+# Heavy Dataset and Machine Learning Outputs
+data/access_logs.csv
+data/anomaly_results.csv
+data/risk_scores.json
+data/risk_scores.csv
+
+# Heavy Trained ML Model Binary files
+models/attack_classifier.joblib
+models/isolation_forest.joblib
+
+# OS files
+.DS_Store
+Thumbs.db

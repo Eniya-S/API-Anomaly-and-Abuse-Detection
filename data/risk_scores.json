@@ -1,0 +1,31 @@
+[
+  {
+    "Timestamp":1787648858000,
+    "Username":"anonymous",
+    "Client_IP":"127.0.0.1",
+    "Endpoint":"\/",
+    "HTTP_Method":"GET",
+    "HTTP_Status":200,
+    "Response_Time_ms":104.13,
+    "User_Agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Code\/1.134.0 Chrome\/148.0.7778.280 Electron\/42.8.1 Safari\/537.36",
+    "Session_ID":"059bb6b8-5d36-4ff8-b18f-554a5a735707",
+    "Request_ID":"4899eca0-90c2-4e3c-bb39-0abdd9db65a2",
+    "Hour":9,
+    "DayOfWeek":"Tuesday",
+    "IsWeekend":0,
+    "IsSuccess":1,
+    "IsFailure":0,
+    "HTTP_Method_Encoded":0,
+    "Requests_Per_User":1,
+    "Requests_Per_IP":1,
+    "Requests_Per_Session":1,
+    "Unique_Endpoints_Per_User":1,
+    "Failure_Rate_Per_User":0.0,
+    "Average_Response_Time_User":104.13,
+    "Anomaly_Label":-1,
+    "Attack_Type":"Request_Flooding",
+    "Risk_Score":66,
+    "Risk_Category":"High Risk",
+    "Detection_Reason":"Isolation Forest flagged this request as anomalous; Classified as Request Flooding volume abuse; One suspicious request was linked to this user; Response time was unusually high"
+  }
+]

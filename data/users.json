@@ -2,7 +2,7 @@
     {
         "username": "Bhavadharani S",
         "email": "bhava1234@gmail.com",
-        "password": "bhava@2402"
+        "password_hash": "scrypt:32768:8:1$VODqLJqcg24HjfB4$687e47b1b8b972c3ab5a0d76d119a97e95bfbeb182f6b50766ed0de13bfaa1572248368ab40e1229bdee27cff3f7e7d1daf41f6a9be1d158fb022dff4cf5e2f5"
     },
     {
         "username": "Deekshi",
@@ -94,11 +94,11 @@
     {
         "username": "tester",
         "email": "tester@example.com",
-        "password": "Password123"
+        "password_hash": "scrypt:32768:8:1$ouV4QaYQSSzcQApj$3e16c0ada9381118654e5d1b6bcae596ad23157d2e22105b833ce8397142945935c67f4389fbe06aedfbe68bf7f29a66b1e34849ee4a351b7de90ca0c6957b59"
     },
     {
         "username": "demo",
         "email": "d@e.com",
-        "password": "pw"
+        "password_hash": "scrypt:32768:8:1$hlrMD1c9B5eOMKWW$306982d4a4e3cb284cb6e57b984ab34d7af089fbd6c26e0234be4d881b1bf62567f3b457f1314aac0adaa9f385e40757de18837ea4ee473f7ad41751cb55f780"
     }
 ]
