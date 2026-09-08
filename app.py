@@ -4,9 +4,11 @@ import os
 import time
 import uuid
 from pathlib import Path
-from logger import log_request
+from logger import get_assigned_user_ip, log_request
 import subprocess
 import sys
+
+from risk_scoring import send_email
 
 app = Flask(__name__)
 app.secret_key = "api_anomaly_project"
@@ -28,6 +30,7 @@ if not os.path.exists(API_TEST_FILE):
 def before_request():
     g.request_start_time = time.perf_counter()
     g.request_id = str(uuid.uuid4())
+    g.request_username = session.get("user")
 
 
 @app.after_request
@@ -114,7 +117,8 @@ def signup():
         users.append({
             "username": username,
             "email": email,
-            "password": password
+            "password": password,
+            "simulated_ip": get_assigned_user_ip(username, users),
         })
 
         save_users(users)
@@ -147,35 +151,35 @@ def login():
 
 
 # ---------------- DASHBOARD ----------------
-# @app.route("/dashboard")
-# def dashboard():
-#     if "user" not in session:
-#         session["next_page"] = "dashboard"
-#         return redirect(url_for("login"))
-
-#     total_tests = len(load_api_tests())
-
-#     return render_template(
-#         "dashboard.html",
-#         username=session["user"],
-#         total_apis=8,
-#         active_users=len(load_users()),
-#         total_tests=total_tests,
-#     )
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
         session["next_page"] = "dashboard"
-    subprocess.Popen([
-        sys.executable,
-        "-m",
-        "streamlit",
-        "run",
-        "dashboard.py"
-    ])
-        # return redirect(url_for("login"))
+        return redirect(url_for("login"))
 
-    return redirect("http://localhost:8501")
+    total_tests = len(load_api_tests())
+
+    return render_template(
+        "dashboard.html",
+        username=session["user"],
+        total_apis=8,
+        active_users=len(load_users()),
+        total_tests=total_tests,
+    )
+# @app.route("/dashboard")
+# def dashboard():
+#     if "user" not in session:
+#         session["next_page"] = "dashboard"
+#     subprocess.Popen([
+#         sys.executable,
+#         "-m",
+#         "streamlit",
+#         "run",
+#         "dashboard.py"
+#     ])
+#     return redirect(url_for("login"))
+
+#     # return redirect("http://localhost:8501")
 
 # ---------------- PROFILE ----------------
 @app.route("/profile")
@@ -184,7 +188,44 @@ def profile():
         session["next_page"] = "profile"
         return redirect(url_for("login"))
 
-    return render_template("profile.html", username=session["user"])
+    alert_message = session.pop("alert_message", None)
+    return render_template("profile.html", username=session["user"], alert_message=alert_message)
+
+
+@app.route("/send-risk-alert")
+def send_risk_alert():
+    if "user" not in session:
+        session["next_page"] = "send_risk_alert"
+        return redirect(url_for("login"))
+
+    current_user = session["user"]
+    users = load_users()
+    user_record = next((user for user in users if user.get("username") == current_user), None)
+
+    if not user_record or not user_record.get("email"):
+        session["alert_message"] = "No registered email found for this user."
+        return redirect(url_for("profile"))
+
+    email = user_record["email"]
+    score = 92
+    reason = "The system detected repeated suspicious API activity and elevated failure behavior."
+    subject = f"Security Alert: High Risk Score for {current_user}"
+    message = (
+        f"Hello {current_user},\n\n"
+        f"Your API activity has been flagged as high risk with a score of {score}/100.\n"
+        f"Reason(s): {reason}\n\n"
+        "Please review your recent activity and confirm whether this was authorized."
+    )
+
+    if send_email(email, subject, message):
+        session["alert_message"] = f"High-risk alert email sent to {email}."
+    else:
+        session["alert_message"] = (
+            "Alert could not be sent. Please configure SMTP credentials "
+            "(SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD) in the environment."
+        )
+
+    return redirect(url_for("profile"))
 
 
 # ---------------- API SERVICES ----------------

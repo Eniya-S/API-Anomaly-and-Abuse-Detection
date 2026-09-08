@@ -1,5 +1,8 @@
 import argparse
 import json
+import os
+import smtplib
+from email.message import EmailMessage
 from pathlib import Path
 from typing import Dict, List
 
@@ -48,6 +51,144 @@ def _risk_category(score: float) -> str:
     if score >= 35:
         return "Medium Risk"
     return "Low Risk"
+
+
+HIGH_RISK_THRESHOLD = 65
+
+
+def send_email(to_email: str, subject: str, message: str, smtp_host: str | None = None,
+               smtp_port: int | None = None, smtp_username: str | None = None,
+               smtp_password: str | None = None, from_email: str | None = None,
+               use_tls: bool = True, use_ssl: bool | None = None) -> bool:
+    smtp_host = smtp_host or os.getenv("SMTP_HOST")
+    smtp_port = smtp_port or int(os.getenv("SMTP_PORT", 587))
+    smtp_username = smtp_username or os.getenv("SMTP_USERNAME")
+    smtp_password = smtp_password or os.getenv("SMTP_PASSWORD")
+    from_email = from_email or os.getenv("SMTP_FROM") or os.getenv("SMTP_FROM_EMAIL") or smtp_username
+    if use_ssl is None:
+        use_ssl = os.getenv("SMTP_USE_SSL", "false").lower() in {"1", "true", "yes"}
+
+    if not smtp_host or not smtp_username or not smtp_password or not to_email:
+        return False
+
+    email_message = EmailMessage()
+    email_message["Subject"] = subject
+    email_message["From"] = from_email or "noreply@localhost"
+    email_message["To"] = to_email
+    email_message.set_content(message)
+
+    try:
+        smtp_connection = smtplib.SMTP_SSL if use_ssl else smtplib.SMTP
+        with smtp_connection(smtp_host, smtp_port, timeout=10) as server:
+            if use_tls and not use_ssl:
+                server.starttls()
+            if smtp_username:
+                server.login(smtp_username, smtp_password)
+            server.send_message(email_message)
+        return True
+    except (OSError, TimeoutError, smtplib.SMTPException) as exc:
+        print(f"SMTP send failed for {to_email}: {type(exc).__name__}: {exc}")
+        return False
+
+
+def load_users(users_file: str | Path | None = None) -> dict[str, str]:
+    path = Path(users_file or "data/users.json")
+    if not path.exists():
+        return {}
+
+    try:
+        with open(path, "r", encoding="utf-8") as file:
+            users = json.load(file)
+    except Exception:
+        return {}
+
+    user_emails: dict[str, str] = {}
+    for user in users:
+        username = str(user.get("username", "")).strip()
+        email = str(user.get("email", "")).strip()
+        if username and email:
+            user_emails[username] = email
+    return user_emails
+
+
+def send_high_risk_alerts(scored_df: pd.DataFrame, users_file: str | Path | None = None,
+                         threshold: int = HIGH_RISK_THRESHOLD) -> list[dict]:
+    if scored_df.empty:
+        return []
+
+    user_emails = load_users(users_file)
+    if not user_emails:
+        return []
+
+    high_risk_rows = scored_df[scored_df["Risk_Score"] >= threshold].copy()
+    if high_risk_rows.empty:
+        return []
+
+    alerts_sent: list[dict] = []
+
+    for username, group in high_risk_rows.groupby("Username", dropna=False):
+        username_str = str(username).strip()
+        if not username_str:
+            continue
+
+        email_to = user_emails.get(username_str)
+        if not email_to:
+            continue
+
+        highest_score = int(group["Risk_Score"].max())
+        reasons = group["Detection_Reason"].dropna().astype(str)
+        reason_text = "; ".join(reasons.head(3).tolist()) if not reasons.empty else "Repeated suspicious activity"
+        subject = f"Security Alert: High Risk Score for {username_str}"
+        message = (
+            f"Hello {username_str},\n\n"
+            f"Your API activity has been flagged as high risk with a score of {highest_score}/100.\n"
+            f"Reason(s): {reason_text}\n\n"
+            "Please review your recent activity and confirm whether this was authorized."
+        )
+
+        if send_email(email_to, subject, message):
+            alerts_sent.append({
+                "username": username_str,
+                "email": email_to,
+                "score": highest_score,
+                "subject": subject,
+                "message": message,
+            })
+
+    return alerts_sent
+
+
+def send_admin_risk_alerts(scored_df: pd.DataFrame, admin_email: str | None = None,
+                           threshold: int = HIGH_RISK_THRESHOLD) -> bool:
+    """Send the admin one report listing each user above the risk threshold."""
+    admin_email = admin_email or os.getenv("ADMIN_EMAIL")
+    if not admin_email or scored_df.empty:
+        return False
+
+    high_risk_rows = scored_df[scored_df["Risk_Score"] >= threshold].copy()
+    if high_risk_rows.empty:
+        return False
+
+    highest_risk_by_user = (
+        high_risk_rows.sort_values("Risk_Score", ascending=False)
+        .drop_duplicates("Username")
+    )
+    details = []
+    for _, row in highest_risk_by_user.iterrows():
+        details.append(
+            f"Person: {row['Username']}\n"
+            f"Risk category: {row['Risk_Category']}\n"
+            f"Risk score: {int(row['Risk_Score'])}/100\n"
+            f"Reason: {row.get('Detection_Reason', 'Suspicious activity detected')}"
+        )
+
+    subject = f"API Risk Alert: {len(details)} user(s) require attention"
+    message = (
+        "The API anomaly detector identified the following high-risk users.\n\n"
+        + "\n\n---\n\n".join(details)
+        + "\n\nPlease review the risk dashboard for the related requests."
+    )
+    return send_email(admin_email, subject, message)
 
 
 def score_requests(input_path: str | Path | None = None, output_csv: str | Path | None = None, output_json: str | Path | None = None) -> pd.DataFrame:
@@ -190,6 +331,12 @@ def score_requests(input_path: str | Path | None = None, output_csv: str | Path 
     output_json.parent.mkdir(parents=True, exist_ok=True)
     scored_df.to_csv(output_csv, index=False)
     scored_df.to_json(output_json, orient="records", indent=2)
+
+    admin_alert_sent = send_admin_risk_alerts(scored_df)
+    if admin_alert_sent:
+        print("Sent risk summary email to the admin.")
+    elif (scored_df["Risk_Score"] >= HIGH_RISK_THRESHOLD).any():
+        print("Admin risk email was not sent. Set ADMIN_EMAIL and verify SMTP settings.")
 
     print(f"Saved request-level risk scores to {output_csv}")
     print(f"Saved JSON risk output to {output_json}")

@@ -20,6 +20,14 @@ href="{{ url_for('static',filename='style.css') }}">
 
 <h2>Welcome, {{ username }}!</h2>
 
+{% if alert_message %}
+
+<p style="color: #ffd700; font-weight: bold;">
+{{ alert_message }}
+</p>
+
+{% endif %}
+
 <p>
 
 <b>Username :</b>
@@ -51,6 +59,16 @@ Logged In ✅
 <button>
 
 Dashboard
+
+</button>
+
+</a>
+
+<a href="/send-risk-alert">
+
+<button>
+
+Send Risk Alert
 
 </button>
 

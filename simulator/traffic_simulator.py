@@ -1,5 +1,4 @@
 import csv
-import hashlib
 import json
 import random
 import time
@@ -23,15 +22,30 @@ USER_AGENTS = [
 
 # Fast mode flag configured via argparse
 FAST_MODE = False
+USER_IP_MAP = {}
 
 def load_users():
     with USERS_FILE.open("r", encoding="utf-8") as file:
         return json.load(file)
 
+def configure_user_ips(users):
+    if len(users) > 253:
+        raise ValueError("At most 253 users can be assigned unique simulator IPs")
+
+    usernames = [user["username"] for user in users]
+    if len(usernames) != len(set(usernames)):
+        raise ValueError("Each user must have a unique username")
+
+    global USER_IP_MAP
+    USER_IP_MAP = {
+        username: f"198.51.100.{index + 2}"
+        for index, username in enumerate(usernames)
+    }
+
 def stable_client_ip(username):
-    digest = hashlib.sha1(username.encode("utf-8")).hexdigest()
-    octet = int(digest[:2], 16) % 100 + 2
-    return f"198.51.100.{octet}"
+    if username not in USER_IP_MAP:
+        configure_user_ips(load_users())
+    return USER_IP_MAP[username]
 
 def make_headers(username, persona, client_ip, session_id):
     return {
@@ -322,6 +336,7 @@ def main():
     
     try:
         users = load_users()
+        configure_user_ips(users)
     except Exception as e:
         print(f"Error loading users: {e}. Please ensure data/users.json is present.")
         return

@@ -95,5 +95,35 @@
         "username": "tester",
         "email": "tester@example.com",
         "password": "Password123"
+    },
+    {
+        "username": "demo",
+        "email": "d@e.com",
+        "password": "pw"
+    },
+    {
+        "username": "eniya",
+        "email": "eniyas.23cse@kongu.edu",
+        "password": "12345678"
+    },
+    {
+        "username": "varshu",
+        "email": "varshu@gmail.com",
+        "password": "123456789"
+    },
+    {
+        "username": "bhava",
+        "email": "bhava@gmail.com",
+        "password": "1234567"
+    },
+    {
+        "username": "eniyas",
+        "email": "eniya@gmail.com",
+        "password": "123456"
+    },
+    {
+        "username": "dummy",
+        "email": "dummy@gmail.com",
+        "password": "1234567"
     }
 ]

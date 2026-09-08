@@ -26,3 +26,17 @@ The primary objective of this research is to design and evaluate a Machine Learn
 In scenarios where publicly available datasets are limited, synthetic API traffic can be generated to simulate both normal and malicious behaviors for experimentation and evaluation.
 
 The expected outcome is a scalable and intelligent API security framework that enhances the protection of modern applications by proactively identifying abnormal usage patterns before they escalate into security incidents.
+
+Email risk alerts
+------------------
+
+Run `python risk_scoring.py` after generating anomaly results. When a user's score is at least 65, the run sends the admin one summary email containing the person's name, risk category, score, and reason.
+
+Configure these environment variables in Vercel Project Settings -> Environment Variables:
+
+	ADMIN_EMAIL=admin@example.com
+	SMTP_HOST=smtp.gmail.com
+	SMTP_PORT=587
+	SMTP_USERNAME=your-smtp-account@example.com
+	SMTP_PASSWORD=your-app-password
+	SMTP_FROM_EMAIL=your-smtp-account@example.com

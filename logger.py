@@ -1,4 +1,6 @@
 import csv
+import hashlib
+import json
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -38,14 +40,50 @@ ALLOWED_ENDPOINTS = {
     "/logout"
 }
 
+def get_assigned_user_ip(username, users=None):
+    if not username or username == "anonymous":
+        return None
 
-def extract_client_ip(request):
+    if users is None:
+        users_file = DATA_DIR / "users.json"
+        try:
+            with users_file.open("r", encoding="utf-8") as file:
+                users = json.load(file)
+        except (OSError, json.JSONDecodeError):
+            users = []
+
+    for index, user in enumerate(users):
+        if user.get("username") == username:
+            return user.get("simulated_ip") or f"198.51.100.{index + 2}"
+
+    digest = hashlib.sha256(username.encode("utf-8")).digest()
+    address_number = int.from_bytes(digest[:4], "big") % 131070
+    used_ips = {
+        user.get("simulated_ip") or f"198.51.100.{index + 2}"
+        for index, user in enumerate(users)
+    }
+    for offset in range(131070):
+        candidate_number = (address_number + offset) % 131070
+        second_octet, remainder = divmod(candidate_number, 65536)
+        third_octet, fourth_octet = divmod(remainder, 256)
+        candidate = f"198.{second_octet + 18}.{third_octet}.{fourth_octet}"
+        if candidate not in used_ips:
+            return candidate
+    return None
+
+def extract_client_ip(request, username=None):
     # Only trust X-Forwarded-For if it is simulated traffic (marked by X-Persona header)
     if request.headers.get("X-Persona"):
         forwarded_for = request.headers.get("X-Forwarded-For")
         if forwarded_for:
             return forwarded_for.split(",")[0].strip()
-    return request.remote_addr or "unknown"
+
+    assigned_ip = get_assigned_user_ip(username)
+    if assigned_ip:
+        return assigned_ip
+    if username and username != "anonymous":
+        return get_assigned_user_ip(username)
+    return "198.51.100.254"
 
 
 def should_log_request(path):
@@ -139,12 +177,17 @@ def log_request(request, status_code, response_time_ms=None, request_id=None, se
     # - If the user is authenticated, obtain the username from the Flask session.
     # - If no authenticated session exists, check X-User header.
     # - Otherwise, use 'anonymous'.
-    if flask_session.get("user"):
+    if getattr(g, "request_username", None):
+        username = g.request_username
+    elif flask_session.get("user"):
         username = flask_session["user"]
     else:
-        username = request.headers.get("X-User") or "anonymous"
+        username = request.headers.get("X-User")
+        if not username and endpoint in {"/login", "/signup"}:
+            username = request.form.get("username")
+        username = username or "anonymous"
 
-    client_ip = extract_client_ip(request)
+    client_ip = extract_client_ip(request, username)
     endpoint = request.path or ""
     method = request.method
 
