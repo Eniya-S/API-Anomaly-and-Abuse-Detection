@@ -1,0 +1,112 @@
+user_id,attack_type,attack_count,base_risk,repeat_bonus,risk_score,risk_level
+User_004,Directory Traversal,7,70,12,82,CRITICAL
+User_004,Directory Traversal,7,70,12,82,CRITICAL
+User_004,Directory Traversal,7,70,12,82,CRITICAL
+User_004,Directory Traversal,7,70,12,82,CRITICAL
+User_004,Directory Traversal,7,70,12,82,CRITICAL
+User_004,Directory Traversal,7,70,12,82,CRITICAL
+User_004,Directory Traversal,7,70,12,82,CRITICAL
+User_005,Directory Traversal,5,70,8,78,HIGH
+User_005,Directory Traversal,5,70,8,78,HIGH
+User_005,Directory Traversal,5,70,8,78,HIGH
+User_005,Directory Traversal,5,70,8,78,HIGH
+User_005,Directory Traversal,5,70,8,78,HIGH
+User_012,Cookie Injection,5,60,8,68,HIGH
+User_012,Cookie Injection,5,60,8,68,HIGH
+User_012,Cookie Injection,5,60,8,68,HIGH
+User_012,Cookie Injection,5,60,8,68,HIGH
+User_012,Cookie Injection,5,60,8,68,HIGH
+User_014,Directory Traversal,6,70,10,80,CRITICAL
+User_014,Directory Traversal,6,70,10,80,CRITICAL
+User_014,Directory Traversal,6,70,10,80,CRITICAL
+User_014,Directory Traversal,6,70,10,80,CRITICAL
+User_014,Directory Traversal,6,70,10,80,CRITICAL
+User_014,Directory Traversal,6,70,10,80,CRITICAL
+User_015,SQL Injection,6,80,10,90,CRITICAL
+User_015,SQL Injection,6,80,10,90,CRITICAL
+User_015,SQL Injection,6,80,10,90,CRITICAL
+User_015,SQL Injection,6,80,10,90,CRITICAL
+User_015,SQL Injection,6,80,10,90,CRITICAL
+User_015,SQL Injection,6,80,10,90,CRITICAL
+User_018,SQL Injection,4,80,6,86,CRITICAL
+User_018,SQL Injection,4,80,6,86,CRITICAL
+User_018,SQL Injection,4,80,6,86,CRITICAL
+User_018,SQL Injection,4,80,6,86,CRITICAL
+User_028,RCE,4,90,6,96,CRITICAL
+User_028,RCE,4,90,6,96,CRITICAL
+User_028,RCE,4,90,6,96,CRITICAL
+User_028,RCE,4,90,6,96,CRITICAL
+User_029,LOG4J,4,85,6,91,CRITICAL
+User_029,LOG4J,4,85,6,91,CRITICAL
+User_029,LOG4J,4,85,6,91,CRITICAL
+User_029,LOG4J,4,85,6,91,CRITICAL
+User_030,Log Forging,8,50,14,64,HIGH
+User_030,Log Forging,8,50,14,64,HIGH
+User_030,Log Forging,8,50,14,64,HIGH
+User_030,Log Forging,8,50,14,64,HIGH
+User_030,Log Forging,8,50,14,64,HIGH
+User_030,Log Forging,8,50,14,64,HIGH
+User_030,Log Forging,8,50,14,64,HIGH
+User_030,Log Forging,8,50,14,64,HIGH
+User_032,Cookie Injection,5,60,8,68,HIGH
+User_032,Cookie Injection,5,60,8,68,HIGH
+User_032,Cookie Injection,5,60,8,68,HIGH
+User_032,Cookie Injection,5,60,8,68,HIGH
+User_032,Cookie Injection,5,60,8,68,HIGH
+User_036,Log Forging,8,50,14,64,HIGH
+User_036,Log Forging,8,50,14,64,HIGH
+User_036,Log Forging,8,50,14,64,HIGH
+User_036,Log Forging,8,50,14,64,HIGH
+User_036,Log Forging,8,50,14,64,HIGH
+User_036,Log Forging,8,50,14,64,HIGH
+User_036,Log Forging,8,50,14,64,HIGH
+User_036,Log Forging,8,50,14,64,HIGH
+User_055,SQL Injection,4,80,6,86,CRITICAL
+User_055,SQL Injection,4,80,6,86,CRITICAL
+User_055,SQL Injection,4,80,6,86,CRITICAL
+User_055,SQL Injection,4,80,6,86,CRITICAL
+User_065,Cookie Injection,4,60,6,66,HIGH
+User_065,Cookie Injection,4,60,6,66,HIGH
+User_065,Cookie Injection,4,60,6,66,HIGH
+User_065,Cookie Injection,4,60,6,66,HIGH
+User_070,Log Forging,7,50,12,62,HIGH
+User_070,Log Forging,7,50,12,62,HIGH
+User_070,Log Forging,7,50,12,62,HIGH
+User_070,Log Forging,7,50,12,62,HIGH
+User_070,Log Forging,7,50,12,62,HIGH
+User_070,Log Forging,7,50,12,62,HIGH
+User_070,Log Forging,7,50,12,62,HIGH
+User_072,SQL Injection,7,80,12,92,CRITICAL
+User_072,SQL Injection,7,80,12,92,CRITICAL
+User_072,SQL Injection,7,80,12,92,CRITICAL
+User_072,SQL Injection,7,80,12,92,CRITICAL
+User_072,SQL Injection,7,80,12,92,CRITICAL
+User_072,SQL Injection,7,80,12,92,CRITICAL
+User_072,SQL Injection,7,80,12,92,CRITICAL
+User_076,LOG4J,8,85,14,99,CRITICAL
+User_076,LOG4J,8,85,14,99,CRITICAL
+User_076,LOG4J,8,85,14,99,CRITICAL
+User_076,LOG4J,8,85,14,99,CRITICAL
+User_076,LOG4J,8,85,14,99,CRITICAL
+User_076,LOG4J,8,85,14,99,CRITICAL
+User_076,LOG4J,8,85,14,99,CRITICAL
+User_076,LOG4J,8,85,14,99,CRITICAL
+User_078,LOG4J,8,85,14,99,CRITICAL
+User_078,LOG4J,8,85,14,99,CRITICAL
+User_078,LOG4J,8,85,14,99,CRITICAL
+User_078,LOG4J,8,85,14,99,CRITICAL
+User_078,LOG4J,8,85,14,99,CRITICAL
+User_078,LOG4J,8,85,14,99,CRITICAL
+User_078,LOG4J,8,85,14,99,CRITICAL
+User_078,LOG4J,8,85,14,99,CRITICAL
+User_082,LOG4J,4,85,6,91,CRITICAL
+User_082,LOG4J,4,85,6,91,CRITICAL
+User_082,LOG4J,4,85,6,91,CRITICAL
+User_082,LOG4J,4,85,6,91,CRITICAL
+User_087,RCE,4,90,6,96,CRITICAL
+User_087,RCE,4,90,6,96,CRITICAL
+User_087,RCE,4,90,6,96,CRITICAL
+User_087,RCE,4,90,6,96,CRITICAL
+User_095,RCE,3,90,4,94,CRITICAL
+User_095,RCE,3,90,4,94,CRITICAL
+User_095,RCE,3,90,4,94,CRITICAL

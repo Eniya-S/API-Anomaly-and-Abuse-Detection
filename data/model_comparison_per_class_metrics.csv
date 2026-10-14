@@ -1,0 +1,61 @@
+model,split,class,precision,recall,f1-score,support
+Random Forest,row_split,Cookie Injection,1.0,1.0,1.0,113.0
+Random Forest,row_split,Directory Traversal,1.0,1.0,1.0,54.0
+Random Forest,row_split,LOG4J,1.0,1.0,1.0,55.0
+Random Forest,row_split,Log Forging,1.0,1.0,1.0,60.0
+Random Forest,row_split,RCE,1.0,1.0,1.0,54.0
+Random Forest,row_split,SQL Injection,1.0,1.0,1.0,117.0
+Decision Tree,row_split,Cookie Injection,1.0,1.0,1.0,113.0
+Decision Tree,row_split,Directory Traversal,1.0,1.0,1.0,54.0
+Decision Tree,row_split,LOG4J,1.0,1.0,1.0,55.0
+Decision Tree,row_split,Log Forging,1.0,1.0,1.0,60.0
+Decision Tree,row_split,RCE,1.0,1.0,1.0,54.0
+Decision Tree,row_split,SQL Injection,1.0,1.0,1.0,117.0
+SVM,row_split,Cookie Injection,1.0,1.0,1.0,113.0
+SVM,row_split,Directory Traversal,1.0,1.0,1.0,54.0
+SVM,row_split,LOG4J,1.0,1.0,1.0,55.0
+SVM,row_split,Log Forging,1.0,1.0,1.0,60.0
+SVM,row_split,RCE,1.0,1.0,1.0,54.0
+SVM,row_split,SQL Injection,1.0,1.0,1.0,117.0
+KNN,row_split,Cookie Injection,1.0,1.0,1.0,113.0
+KNN,row_split,Directory Traversal,1.0,1.0,1.0,54.0
+KNN,row_split,LOG4J,1.0,1.0,1.0,55.0
+KNN,row_split,Log Forging,1.0,1.0,1.0,60.0
+KNN,row_split,RCE,1.0,1.0,1.0,54.0
+KNN,row_split,SQL Injection,1.0,1.0,1.0,117.0
+XGBoost,row_split,Cookie Injection,1.0,1.0,1.0,113.0
+XGBoost,row_split,Directory Traversal,1.0,1.0,1.0,54.0
+XGBoost,row_split,LOG4J,1.0,1.0,1.0,55.0
+XGBoost,row_split,Log Forging,1.0,1.0,1.0,60.0
+XGBoost,row_split,RCE,1.0,1.0,1.0,54.0
+XGBoost,row_split,SQL Injection,1.0,1.0,1.0,117.0
+Random Forest,grouped_split,Cookie Injection,1.0,1.0,1.0,113.0
+Random Forest,grouped_split,Directory Traversal,1.0,1.0,1.0,54.0
+Random Forest,grouped_split,LOG4J,1.0,1.0,1.0,55.0
+Random Forest,grouped_split,Log Forging,1.0,1.0,1.0,60.0
+Random Forest,grouped_split,RCE,1.0,1.0,1.0,54.0
+Random Forest,grouped_split,SQL Injection,1.0,1.0,1.0,117.0
+Decision Tree,grouped_split,Cookie Injection,1.0,1.0,1.0,113.0
+Decision Tree,grouped_split,Directory Traversal,1.0,1.0,1.0,54.0
+Decision Tree,grouped_split,LOG4J,1.0,1.0,1.0,55.0
+Decision Tree,grouped_split,Log Forging,1.0,1.0,1.0,60.0
+Decision Tree,grouped_split,RCE,1.0,1.0,1.0,54.0
+Decision Tree,grouped_split,SQL Injection,1.0,1.0,1.0,117.0
+SVM,grouped_split,Cookie Injection,1.0,1.0,1.0,113.0
+SVM,grouped_split,Directory Traversal,1.0,1.0,1.0,54.0
+SVM,grouped_split,LOG4J,1.0,1.0,1.0,55.0
+SVM,grouped_split,Log Forging,1.0,1.0,1.0,60.0
+SVM,grouped_split,RCE,1.0,1.0,1.0,54.0
+SVM,grouped_split,SQL Injection,1.0,1.0,1.0,117.0
+KNN,grouped_split,Cookie Injection,1.0,1.0,1.0,113.0
+KNN,grouped_split,Directory Traversal,1.0,1.0,1.0,54.0
+KNN,grouped_split,LOG4J,1.0,1.0,1.0,55.0
+KNN,grouped_split,Log Forging,1.0,1.0,1.0,60.0
+KNN,grouped_split,RCE,1.0,1.0,1.0,54.0
+KNN,grouped_split,SQL Injection,1.0,1.0,1.0,117.0
+XGBoost,grouped_split,Cookie Injection,1.0,1.0,1.0,113.0
+XGBoost,grouped_split,Directory Traversal,1.0,1.0,1.0,54.0
+XGBoost,grouped_split,LOG4J,1.0,1.0,1.0,55.0
+XGBoost,grouped_split,Log Forging,1.0,1.0,1.0,60.0
+XGBoost,grouped_split,RCE,1.0,1.0,1.0,54.0
+XGBoost,grouped_split,SQL Injection,1.0,1.0,1.0,117.0

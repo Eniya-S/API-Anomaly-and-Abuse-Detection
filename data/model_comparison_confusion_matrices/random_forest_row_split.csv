@@ -1,0 +1,7 @@
+,Cookie Injection,Directory Traversal,LOG4J,Log Forging,RCE,SQL Injection
+Cookie Injection,113,0,0,0,0,0
+Directory Traversal,0,54,0,0,0,0
+LOG4J,0,0,55,0,0,0
+Log Forging,0,0,0,60,0,0
+RCE,0,0,0,0,54,0
+SQL Injection,0,0,0,0,0,117
