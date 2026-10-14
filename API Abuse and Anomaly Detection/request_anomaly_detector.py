@@ -1,20 +1,11 @@
 import pandas as pd
+import joblib
+from pathlib import Path
 from sklearn.ensemble import IsolationForest
 
-
 INPUT_PATH = "data/request_features.csv"
-
-
-# ==========================================
-# Load features
-# ==========================================
-
-df = pd.read_csv(INPUT_PATH)
-
-
-# ==========================================
-# Features used by the model
-# ==========================================
+OUTPUT_PATH = "data/request_anomaly_results.csv"
+MODEL_PATH = "data/isolation_forest.pkl"
 
 FEATURES = [
     "url_length",
@@ -38,187 +29,71 @@ FEATURES = [
     "method_encoded"
 ]
 
+# Load Dataset 1 features
+df = pd.read_csv(INPUT_PATH)
 
-# ==========================================
 # Train only on normal requests
-# ==========================================
-
-normal_df = df[
-    df["label"] == "Normal"
-].copy()
-
+normal_df = df[df["label"] == "Normal"].copy()
 X_train = normal_df[FEATURES]
 
-
-# ==========================================
-# Isolation Forest
-# ==========================================
-
+# Create and train Isolation Forest
 model = IsolationForest(
     n_estimators=300,
     contamination=0.15,
     random_state=42
 )
-
-
 model.fit(X_train)
 
+# Save the trained model for future reuse
+joblib.dump(model, MODEL_PATH)
+print(f"\nSaved trained Isolation Forest to: {MODEL_PATH}")
 
-# ==========================================
-# Predict all requests
-# ==========================================
+# Predict all Dataset 1 requests
+df["anomaly_prediction"] = model.predict(df[FEATURES])
 
-X_all = df[FEATURES]
-
-predictions = model.predict(X_all)
-
-df["anomaly_prediction"] = predictions
-
-
-# -1 = anomaly
-#  1 = normal
-
-
-# ==========================================
 # Evaluate attack detection
-# ==========================================
+attack_df = df[df["label"] != "Normal"]
+normal_test_df = df[df["label"] == "Normal"]
 
-attack_df = df[
-    df["label"] != "Normal"
-]
-
-normal_df_test = df[
-    df["label"] == "Normal"
-]
-
-
-detected_attacks = (
-    attack_df["anomaly_prediction"] == -1
-).sum()
-
+detected_attacks = (attack_df["anomaly_prediction"] == -1).sum()
 total_attacks = len(attack_df)
+missed_attacks = (attack_df["anomaly_prediction"] == 1).sum()
 
-missed_attacks = (
-    attack_df["anomaly_prediction"] == 1
-).sum()
-
-
-normal_correct = (
-    normal_df_test["anomaly_prediction"] == 1
-).sum()
-
-false_positives = (
-    normal_df_test["anomaly_prediction"] == -1
-).sum()
-
+normal_correct = (normal_test_df["anomaly_prediction"] == 1).sum()
+false_positives = (normal_test_df["anomaly_prediction"] == -1).sum()
 
 attack_detection_rate = (
-    detected_attacks / total_attacks
-) * 100
-
+    detected_attacks / total_attacks * 100 if total_attacks else 0
+)
 false_positive_rate = (
-    false_positives / len(normal_df_test)
-) * 100
-
-
-# ==========================================
-# Results
-# ==========================================
+    false_positives / len(normal_test_df) * 100
+    if len(normal_test_df) else 0
+)
 
 print("\n=== REQUEST ANOMALY DETECTION ===")
-
-print(
-    f"Normal requests for training: "
-    f"{len(normal_df)}"
-)
-
-print(
-    f"Total requests for testing: "
-    f"{len(df)}"
-)
-
+print(f"Normal requests for training: {len(normal_df)}")
+print(f"Total requests evaluated: {len(df)}")
 
 print("\n=== RESULTS ===")
-
-print(
-    f"Total attack requests: "
-    f"{total_attacks}"
-)
-
-print(
-    f"Detected attacks: "
-    f"{detected_attacks}"
-)
-
-print(
-    f"Missed attacks: "
-    f"{missed_attacks}"
-)
-
-print(
-    f"Attack detection rate: "
-    f"{attack_detection_rate:.2f}%"
-)
-
-
+print(f"Total attack requests: {total_attacks}")
+print(f"Detected attacks: {detected_attacks}")
+print(f"Missed attacks: {missed_attacks}")
+print(f"Attack detection rate: {attack_detection_rate:.2f}%")
 print(
     f"\nNormal requests correctly identified: "
-    f"{normal_correct} / {len(normal_df_test)}"
+    f"{normal_correct} / {len(normal_test_df)}"
 )
-
-print(
-    f"False positives: "
-    f"{false_positives}"
-)
-
-print(
-    f"False positive rate: "
-    f"{false_positive_rate:.2f}%"
-)
-
-
-# ==========================================
-# Detection by attack type
-# ==========================================
+print(f"False positives: {false_positives}")
+print(f"False positive rate: {false_positive_rate:.2f}%")
 
 print("\n=== DETECTION BY ATTACK TYPE ===")
+for attack_type in sorted(attack_df["label"].unique()):
+    subset = attack_df[attack_df["label"] == attack_type]
+    detected = (subset["anomaly_prediction"] == -1).sum()
+    total = len(subset)
+    rate = detected / total * 100 if total else 0
+    print(f"{attack_type}: {detected}/{total} detected ({rate:.2f}%)")
 
-for attack_type in sorted(
-    attack_df["label"].unique()
-):
-
-    attack_type_df = attack_df[
-        attack_df["label"] == attack_type
-    ]
-
-    detected = (
-        attack_type_df["anomaly_prediction"] == -1
-    ).sum()
-
-    total = len(attack_type_df)
-
-    rate = (
-        detected / total
-    ) * 100
-
-    print(
-        f"{attack_type}: "
-        f"{detected}/{total} "
-        f"detected ({rate:.2f}%)"
-    )
-
-
-# ==========================================
-# Save results
-# ==========================================
-
-OUTPUT_PATH = "data/request_anomaly_results.csv"
-
-df.to_csv(
-    OUTPUT_PATH,
-    index=False
-)
-
-print(
-    f"\nSaved to: {OUTPUT_PATH}"
-)
+# Save predictions
+df.to_csv(OUTPUT_PATH, index=False)
+print(f"\nSaved results to: {OUTPUT_PATH}")

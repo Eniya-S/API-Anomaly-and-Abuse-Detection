@@ -1,0 +1,11 @@
+model,split,accuracy,precision_macro,recall_macro,f1_macro,precision_weighted,recall_weighted,f1_weighted
+Random Forest,row_split,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+Decision Tree,row_split,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+SVM,row_split,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+KNN,row_split,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+XGBoost,row_split,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+Random Forest,grouped_split,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+Decision Tree,grouped_split,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+SVM,grouped_split,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+KNN,grouped_split,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+XGBoost,grouped_split,1.0,1.0,1.0,1.0,1.0,1.0,1.0
